@@ -14,6 +14,33 @@ import { Container } from "@/components/landing/Container";
 
 export default function ProgramsPage() {
   const [selectedProgram, setSelectedProgram] = useState<number | null>(null);
+  const whatsappNumber = "6281237522400";
+  const selectedProgramData = selectedProgram
+    ? programData.find((program) => program.id === selectedProgram)
+    : null;
+  const programMention = selectedProgramData?.title
+    ? `program ${selectedProgramData.title}`
+    : "program kami";
+  const buildWhatsappUrl = (message: string) =>
+    `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+  const registrationMessage =
+    `saya ingin mendaftar untuk ${programMention},\n\n` +
+    "nama:\nemail:\nno hp:\njenjang:\nprogram:\ntanggal lahir:\nalamat:";
+  const infoMessage =
+    `halllo ms shine, diisini saya ingin bertanya tentang ${programMention}`;
+  const ctaInfoMessage =
+    "Halo 👋\n" +
+    "Saya ingin bertanya lebih lanjut tentang program di Shine Education.\n\n" +
+    "Mohon dibantu informasi terkait program, jadwal, dan sistem pembelajarannya ya.\n\n" +
+    "Terima kasih 🙏";
+  const ctaRegistrationMessage =
+    "Halo 👋\n" +
+    "Saya tertarik untuk mendaftarkan putra/putri saya di program Shine Education.\n\n" +
+    "Mohon informasi lebih lanjut mengenai:\n" +
+    "• Program yang tersedia\n" +
+    "• Jadwal belajar\n" +
+    "• Biaya & cara pendaftaran\n\n" +
+    "Terima kasih 🙏";
 
   return (
     <main className="min-h-screen relative bg-white">
@@ -164,14 +191,27 @@ export default function ProgramsPage() {
                   Daftarkan putra-putri Anda sekarang dan rasakan manfaat dari program pendidikan berkualitas kami.
                 </p>
                 <div className="flex flex-wrap gap-4">
-                  <Button className="bg-white text-[#b42519] hover:bg-gray-100">
-                    Daftar Sekarang
+                  <Button asChild className="bg-white text-[#b42519] hover:bg-gray-100">
+                    <a
+                      href={buildWhatsappUrl(ctaRegistrationMessage)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Daftar Sekarang
+                    </a>
                   </Button>
                   <Button
+                    asChild
                     variant="outline"
                     className="bg-transparent border-2 border-white text-white hover:bg-white/10"
                   >
-                    Hubungi Kami
+                    <a
+                      href={buildWhatsappUrl(ctaInfoMessage)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Hubungi Kami
+                    </a>
                   </Button>
                 </div>
               </div>
@@ -289,7 +329,7 @@ export default function ProgramsPage() {
               <div className="p-6">
                 <div className="flex justify-between items-start">
                   <h2 className="text-2xl font-bold">
-                    {programData.find(p => p.id === selectedProgram)?.title}
+                    {selectedProgramData?.title}
                   </h2>
                   <button
                     onClick={() => setSelectedProgram(null)}
@@ -303,8 +343,8 @@ export default function ProgramsPage() {
                   <div className="relative h-64 rounded-lg overflow-hidden mb-6 flex items-center justify-center">
                     <div className="absolute inset-0">
                       <Image
-                        src={programData.find(p => p.id === selectedProgram)?.image || ''}
-                        alt={programData.find(p => p.id === selectedProgram)?.title || ''}
+                        src={selectedProgramData?.image || ""}
+                        alt={selectedProgramData?.title || ""}
                         fill
                         className="object-cover"
                         sizes="(max-width: 768px) 100vw, 672px"
@@ -314,12 +354,12 @@ export default function ProgramsPage() {
 
                   <h3 className="text-lg font-semibold mb-2 text-[#b42519]">Deskripsi Program</h3>
                   <p className="text-gray-600 mb-4">
-                    {programData.find(p => p.id === selectedProgram)?.description}
+                    {selectedProgramData?.description}
                   </p>
 
                   <h3 className="text-lg font-semibold mb-2 text-[#b42519]">Fitur Program</h3>
                   <ul className="space-y-2 mb-6">
-                    {programData.find(p => p.id === selectedProgram)?.features.map((feature, index) => (
+                    {selectedProgramData?.features?.map((feature, index) => (
                       <li key={index} className="flex items-center">
                         <span className="mr-2 text-[#b42519]">✓</span>
                         <span className="text-gray-600">{feature}</span>
@@ -333,11 +373,30 @@ export default function ProgramsPage() {
                   </p>
 
                   <div className="flex gap-4">
-                    <Button className="bg-[#b42519] hover:bg-[#7a160d] text-white shadow-md">
-                      Daftar Program
+                    <Button
+                      asChild
+                      className="bg-[#b42519] hover:bg-[#7a160d] text-white shadow-md"
+                    >
+                      <a
+                        href={buildWhatsappUrl(registrationMessage)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Daftar Program
+                      </a>
                     </Button>
-                    <Button variant="outline" className="border-[#b42519] text-[#b42519] hover:bg-[#b42519] hover:text-white">
-                      Tanyakan Info
+                    <Button
+                      asChild
+                      variant="outline"
+                      className="border-[#b42519] text-[#b42519] hover:bg-[#b42519] hover:text-white"
+                    >
+                      <a
+                        href={buildWhatsappUrl(infoMessage)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Tanyakan Info
+                      </a>
                     </Button>
                   </div>
                 </div>
