@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Search, ChevronDown, Home, BookOpen, Info, FileText,
-  Menu, X, Briefcase, UserPlus, LogIn
+  Menu, X, Briefcase, UserPlus, LogIn, Image as ImageIcon
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -37,6 +37,7 @@ const Navbar = () => {
     { name: "Beranda", href: "/", icon: Home },
     { name: "Program", href: "/programs", icon: BookOpen },
     { name: "About Us", href: "/about", icon: Info },
+    { name: "Gallery", href: "/gallery", icon: ImageIcon },
     { name: "Blog", href: "/blog", icon: FileText },
     {
       name: "Lainnya",
@@ -74,27 +75,6 @@ const Navbar = () => {
                   priority
                 />
               </Link>
-            </div>
-
-            {/* Search Bar */}
-            <div className="hidden md:flex items-center relative">
-              <div className="relative w-64">
-                <Input
-                  type="text"
-                  placeholder="Cari program..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onFocus={() => setIsSearchFocused(true)}
-                  onBlur={() => setIsSearchFocused(false)}
-                  className="rounded-full pl-10 pr-4 bg-white"
-                />
-                <Search
-                  className={cn(
-                    "absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 transition-colors",
-                    isSearchFocused ? "text-primary" : "text-muted-foreground"
-                  )}
-                />
-              </div>
             </div>
 
             {/* Desktop Navigation */}
