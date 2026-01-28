@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Navbar from "@/components/landing/sections/Navbar";
@@ -26,8 +27,7 @@ export default function ProgramsPage() {
   const registrationMessage =
     `saya ingin mendaftar untuk ${programMention},\n\n` +
     "nama:\nemail:\nno hp:\njenjang:\nprogram:\ntanggal lahir:\nalamat:";
-  const infoMessage =
-    `halllo ms shine, diisini saya ingin bertanya tentang ${programMention}`;
+  const hubungiWaMessage = registrationMessage;
   const ctaInfoMessage =
     "Halo 👋\n" +
     "Saya ingin bertanya lebih lanjut tentang program di Shine Education.\n\n" +
@@ -377,13 +377,9 @@ export default function ProgramsPage() {
                       asChild
                       className="bg-[#b42519] hover:bg-[#7a160d] text-white shadow-md"
                     >
-                      <a
-                        href={buildWhatsappUrl(registrationMessage)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
+                      <Link href={`/programs/daftar${selectedProgram ? `?programId=${selectedProgram}` : ""}`}>
                         Daftar Program
-                      </a>
+                      </Link>
                     </Button>
                     <Button
                       asChild
@@ -391,11 +387,11 @@ export default function ProgramsPage() {
                       className="border-[#b42519] text-[#b42519] hover:bg-[#b42519] hover:text-white"
                     >
                       <a
-                        href={buildWhatsappUrl(infoMessage)}
+                        href={buildWhatsappUrl(hubungiWaMessage)}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        Tanyakan Info
+                        Hubungi via WA
                       </a>
                     </Button>
                   </div>
