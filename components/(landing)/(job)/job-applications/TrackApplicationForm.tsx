@@ -4,51 +4,83 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { trackJobApplication, type JobApplicationTrackResponse } from "@/lib/api";
+import { cn } from "@/lib/utils";
 
-type TrackingResult = {
-  status: string;
-  details: string;
-  nextSteps: string;
-  date: string;
+const STATUS_LABELS: Record<string, { label: string; description: string; color: string }> = {
+  pending: {
+    label: "Menunggu Review",
+    description: "Lamaran Anda telah diterima dan sedang dalam antrean untuk ditinjau oleh tim HR.",
+    color: "bg-amber-500",
+  },
+  reviewed: {
+    label: "Sudah Ditinjau",
+    description: "Lamaran Anda telah ditinjau oleh tim kami.",
+    color: "bg-blue-500",
+  },
+  shortlisted: {
+    label: "Shortlist",
+    description: "Anda masuk dalam daftar kandidat terpilih. Tim kami akan menghubungi Anda untuk tahap selanjutnya.",
+    color: "bg-emerald-500",
+  },
+  rejected: {
+    label: "Tidak Diteruskan",
+    description: "Maaf, untuk lowongan ini kami memutuskan untuk tidak melanjutkan ke tahap berikutnya.",
+    color: "bg-red-500",
+  },
+  hired: {
+    label: "Diterima",
+    description: "Selamat! Anda diterima. Tim HR akan menghubungi Anda untuk proses selanjutnya.",
+    color: "bg-green-500",
+  },
 };
+
+function formatDate(iso?: string | null): string {
+  if (!iso) return "-";
+  try {
+    const d = new Date(iso);
+    return d.toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" });
+  } catch {
+    return iso;
+  }
+}
 
 export function TrackApplicationForm() {
   const [trackingData, setTrackingData] = useState({
     applicationId: "",
     email: "",
   });
-  const [trackingResult, setTrackingResult] = useState<TrackingResult | null>(null);
+  const [trackingResult, setTrackingResult] = useState<JobApplicationTrackResponse | null>(null);
   const [trackingError, setTrackingError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleTrackingSubmit = (e: React.FormEvent) => {
+  const handleTrackingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setTrackingError("");
+    setTrackingResult(null);
 
-    let hasError = false;
-    if (!trackingData.applicationId.trim()) {
+    const id = String(trackingData.applicationId ?? "").trim();
+    const email = String(trackingData.email ?? "").trim();
+
+    if (!id) {
       setTrackingError("ID Aplikasi wajib diisi");
-      hasError = true;
-    } else if (!trackingData.email.trim()) {
+      return;
+    }
+    if (!email) {
       setTrackingError("Email wajib diisi");
-      hasError = true;
+      return;
     }
 
-    if (hasError) return;
-
-    setTimeout(() => {
-      if (trackingData.applicationId && trackingData.email) {
-        setTrackingResult({
-          status: "Dalam Proses Review",
-          details: "Lamaran Anda sedang dalam proses review oleh tim HR kami.",
-          nextSteps:
-            "Anda akan dihubungi melalui email atau telepon jika terpilih untuk tahap wawancara.",
-          date: "Diperbarui pada: 4 Juli 2025",
-        });
-        setTrackingError("");
-      } else {
-        setTrackingError("Data aplikasi tidak ditemukan");
-        setTrackingResult(null);
-      }
-    }, 800);
+    setIsLoading(true);
+    try {
+      const result = await trackJobApplication(id, email);
+      setTrackingResult(result);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Data aplikasi tidak ditemukan.";
+      setTrackingError(msg);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -100,9 +132,10 @@ export function TrackApplicationForm() {
 
         <Button
           type="submit"
-          className="w-full bg-[#DAA625] hover:bg-[#d2a741] text-white btn-animate"
+          disabled={isLoading}
+          className="w-full bg-[#DAA625] hover:bg-[#d2a741] text-white btn-animate disabled:opacity-50"
         >
-          Cek Status
+          {isLoading ? "Memeriksa..." : "Cek Status"}
         </Button>
       </form>
 
@@ -113,19 +146,30 @@ export function TrackApplicationForm() {
           </h3>
 
           <div className="bg-gray-50 rounded-lg p-4">
-            <div className="flex items-center mb-4">
-              <div className="w-3 h-3 rounded-full bg-yellow-500 mr-2"></div>
-              <span className="font-medium">{trackingResult.status}</span>
+            <div className="flex items-center gap-2 mb-2">
+              <div
+                className={cn(
+                  "w-3 h-3 rounded-full",
+                  STATUS_LABELS[trackingResult.status]?.color ?? "bg-gray-500"
+                )}
+              />
+              <span className="font-medium">
+                {STATUS_LABELS[trackingResult.status]?.label ?? trackingResult.status}
+              </span>
             </div>
-
-            <div className="space-y-3 text-gray-600">
-              <p>{trackingResult.details}</p>
-              <p>
-                <span className="font-medium">Langkah Selanjutnya:</span>{" "}
-                {trackingResult.nextSteps}
+            {trackingResult.position && (
+              <p className="text-sm text-gray-600 mb-2">
+                Posisi: {trackingResult.position.title}
+                {trackingResult.position.location ? ` - ${trackingResult.position.location}` : ""}
               </p>
-              <p className="text-sm text-gray-500">{trackingResult.date}</p>
-            </div>
+            )}
+            <p className="text-gray-600">
+              {STATUS_LABELS[trackingResult.status]?.description ??
+                "Status lamaran Anda telah diperbarui."}
+            </p>
+            <p className="text-sm text-gray-500 mt-3">
+              Diperbarui: {formatDate(trackingResult.updated_at ?? trackingResult.created_at)}
+            </p>
           </div>
 
           <div className="mt-6 flex justify-between items-center text-sm">

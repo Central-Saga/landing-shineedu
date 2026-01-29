@@ -13,9 +13,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Copy, AlertCircle } from "lucide-react";
 import { availablePositions } from "@/data/(landing)/(job)/job-applications/job-applications";
 import { cn } from "@/lib/utils";
+import { submitJobApplication } from "@/lib/api";
 
 type FormData = {
   firstName: string;
@@ -48,6 +49,8 @@ export function JobApplicationForm() {
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [trackingCode, setTrackingCode] = useState<string>("");
+  const [submitError, setSubmitError] = useState<string>("");
 
   const fieldBase =
     "bg-gray-50 border-0 shadow-sm focus-visible:ring-[3px] focus-visible:ring-ring/30";
@@ -111,34 +114,103 @@ export function JobApplicationForm() {
     return errors;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const errors = validateForm();
     setFormErrors(errors);
+    setSubmitError("");
 
     if (Object.keys(errors).length > 0) return;
 
     setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      const fd = new FormData();
+      fd.append("first_name", formData.firstName.trim());
+      fd.append("last_name", formData.lastName.trim());
+      fd.append("email", formData.email.trim());
+      fd.append("phone", formData.phone.trim());
+      fd.append("position_id", formData.position);
+      fd.append("experience", formData.experience);
+      fd.append("education", formData.education);
+      fd.append("address", formData.address.trim());
+      if (formData.resume) fd.append("resume", formData.resume);
+      if (formData.coverLetter) fd.append("cover_letter", formData.coverLetter);
+
+      const result = await submitJobApplication(fd);
+      setTrackingCode(String(result?.tracking_code ?? "").trim());
       setSubmitSuccess(true);
       setFormData(initialFormData);
-
       window.scrollTo({ top: 0, behavior: "smooth" });
-      setTimeout(() => setSubmitSuccess(false), 10000);
-    }, 1500);
+      // Konfirmasi tampil terus sampai user klik Tutup (lihat docs/lib-usage-and-confirmation-ux.md)
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Gagal mengirim lamaran. Coba lagi.";
+      setSubmitError(msg);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const copyTrackingCode = () => {
+    if (trackingCode && typeof navigator?.clipboard?.writeText === "function") {
+      navigator.clipboard.writeText(trackingCode);
+    }
   };
 
   return (
     <div className="[scrollbar-gutter:stable]">
+      {submitError && (
+        <div className="mb-8">
+          <Alert variant="destructive" className="bg-destructive/10">
+            <AlertCircle className="h-5 w-5" />
+            <AlertDescription>{submitError}</AlertDescription>
+          </Alert>
+        </div>
+      )}
       {submitSuccess && (
         <div className="mb-8">
           <Alert className="bg-green-50 border border-green-100 dark:bg-green-900/20 dark:border-green-800">
             <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400" />
-            <AlertDescription className="text-green-700 dark:text-green-300 font-medium">
-              Lamaran Anda berhasil dikirim! Tim kami akan meninjau lamaran Anda dan
-              menghubungi jika terpilih untuk tahap selanjutnya.
+            <AlertDescription className="text-green-700 dark:text-green-300 font-medium space-y-2">
+              <p>
+                Lamaran Anda berhasil dikirim! Tim kami akan meninjau lamaran Anda dan
+                menghubungi jika terpilih untuk tahap selanjutnya.
+              </p>
+              {trackingCode && (
+                <p className="mt-3 pt-3 border-t border-green-200">
+                  <span className="font-semibold">ID Aplikasi Anda: </span>
+                  <code className="bg-green-100 dark:bg-green-800/50 px-2 py-1 rounded font-mono text-sm">
+                    {trackingCode}
+                  </code>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="ml-2 h-8 text-green-700 hover:bg-green-100"
+                    onClick={copyTrackingCode}
+                  >
+                    <Copy className="h-4 w-4 mr-1" /> Salin
+                  </Button>
+                  <br />
+                  <span className="text-sm">
+                    Simpan ID ini dan gunakan bersama email Anda di tab &quot;Pantau Status&quot; untuk mengecek status lamaran.
+                  </span>
+                </p>
+              )}
+              <div className="mt-3 pt-3 border-t border-green-200">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="bg-white text-green-700 border-green-300 hover:bg-green-100"
+                  onClick={() => {
+                    setSubmitSuccess(false);
+                    setTrackingCode("");
+                  }}
+                >
+                  Tutup
+                </Button>
+              </div>
             </AlertDescription>
           </Alert>
         </div>

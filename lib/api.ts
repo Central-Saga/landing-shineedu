@@ -1,10 +1,9 @@
 // Base URL API (harus mengarah ke backend, bukan ke domain landing).
-// Jika kosong di development, fallback ke api.shineeducationbali.test agar form Produk & Layanan bisa load data.
+const DEFAULT_API_BASE = "https://api.shineeducationbali.test/api/v2";
+const envUrl = typeof process !== "undefined" ? process.env.NEXT_PUBLIC_API_BASE_URL : undefined;
 const BASE =
-  process.env.NEXT_PUBLIC_API_BASE_URL ??
-  (typeof window !== "undefined" && process.env.NODE_ENV === "development"
-    ? "https://api.shineeducationbali.test/api/v2"
-    : "");
+  (typeof envUrl === "string" && envUrl.trim() ? envUrl.trim() : undefined) ??
+  (typeof window !== "undefined" ? DEFAULT_API_BASE : "");
 
 const publicPrefix = "/public";
 
@@ -154,4 +153,94 @@ export async function submitLandingRegister(
   });
   const out = await handleRes<unknown>(res);
   return out.data;
+}
+
+// --- Job Applications (Lamaran Kerja) ---
+
+export interface JobApplicationSubmitResponse {
+  id?: number;
+  tracking_code?: string;
+  status?: string;
+  message?: string;
+}
+
+function getApiErrorMessage(json: unknown, fallback: string): string {
+  if (json && typeof json === "object") {
+    const obj = json as { message?: string; errors?: Record<string, string[] | string> };
+    if (typeof obj.message === "string" && obj.message.trim()) return obj.message;
+    if (obj.errors && typeof obj.errors === "object") {
+      const parts: string[] = [];
+      for (const v of Object.values(obj.errors)) {
+        if (Array.isArray(v)) parts.push(...v);
+        else if (typeof v === "string") parts.push(v);
+      }
+      if (parts.length) return parts.join(". ");
+    }
+  }
+  return fallback;
+}
+
+export async function submitJobApplication(
+  formData: FormData
+): Promise<JobApplicationSubmitResponse> {
+  const url = `${BASE}${publicPrefix}/job-applications`;
+  if (!BASE) {
+    throw new Error("URL API belum dikonfigurasi. Set NEXT_PUBLIC_API_BASE_URL (mis. https://api.shineeducationbali.test/api/v2)");
+  }
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { Accept: "application/json" },
+    body: formData,
+  });
+  const json = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const msg = getApiErrorMessage(json, res.status === 0 ? "Koneksi gagal. Cek jaringan atau CORS." : res.statusText || "Gagal mengirim lamaran.");
+    throw new Error(msg);
+  }
+  const data = (json as { data?: JobApplicationSubmitResponse })?.data ?? (json as Record<string, unknown>);
+  const tracking = data && typeof data === "object" && "tracking_code" in data ? String((data as { tracking_code?: string }).tracking_code ?? "") : "";
+  return {
+    id: data && typeof data === "object" && "id" in data ? Number((data as { id?: number }).id) : undefined,
+    tracking_code: tracking,
+    status: data && typeof data === "object" && "status" in data ? String((data as { status?: string }).status ?? "pending") : "pending",
+    message: (json as { message?: string })?.message,
+  };
+}
+
+export interface JobApplicationTrackResponse {
+  tracking_code: string;
+  status: string;
+  position?: { title: string; location?: string } | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+}
+
+export async function trackJobApplication(
+  trackingCode: string,
+  email: string
+): Promise<JobApplicationTrackResponse> {
+  if (!BASE) {
+    throw new Error("URL API belum dikonfigurasi.");
+  }
+  const res = await fetch(`${BASE}${publicPrefix}/job-applications/track`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify({ tracking_code: trackingCode.trim(), email: email.trim() }),
+  });
+  const json = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const msg = getApiErrorMessage(json, res.status === 404 ? "Lamaran tidak ditemukan. Pastikan ID Aplikasi dan email benar." : res.statusText || "Data aplikasi tidak ditemukan.");
+    throw new Error(msg);
+  }
+  const data = (json as { data?: JobApplicationTrackResponse })?.data;
+  if (!data || typeof data !== "object") {
+    throw new Error("Data aplikasi tidak ditemukan");
+  }
+  return {
+    tracking_code: String(data.tracking_code ?? trackingCode),
+    status: String(data.status ?? "pending"),
+    position: data.position ?? null,
+    created_at: data.created_at ?? null,
+    updated_at: data.updated_at ?? null,
+  };
 }
