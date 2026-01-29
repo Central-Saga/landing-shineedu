@@ -23,6 +23,7 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isMobileOthersOpen, setIsMobileOthersOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -32,6 +33,10 @@ const Navbar = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    if (!isMobileMenuOpen) setIsMobileOthersOpen(false);
+  }, [isMobileMenuOpen]);
 
   const navItems = [
     { name: "Beranda", href: "/", icon: Home },
@@ -78,9 +83,12 @@ const Navbar = () => {
             </div>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-6">
+            <div className="hidden md:flex items-center gap-2"> {/* Gap diperkecil agar lebih rapat */}
               {navItems.map((item) => {
                 const Icon = item.icon;
+                // Anggap saja kita menggunakan hook usePathname() dari next/navigation untuk deteksi tab aktif
+                const isActive = false; // Ganti dengan logic: pathname === item.href
+
                 return (
                   <div key={item.name} className="relative">
                     {item.isDropdown ? (
@@ -88,45 +96,56 @@ const Navbar = () => {
                         <DropdownMenuTrigger asChild>
                           <Button
                             variant="ghost"
-                            className="flex items-center gap-2 text-gray-600 hover:text-[#b42519] transition-colors font-medium"
-                            type="button"
+                            className={cn(
+                              "group relative flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-[#b42519] transition-all font-medium rounded-full hover:bg-[#b42519]/5 outline-none",
+                              isScrolled ? "text-sm" : "text-base"
+                            )}
                           >
                             <Icon className="h-4 w-4" />
                             {item.name}
-                            <ChevronDown className="h-3 w-3 transition-transform group-data-[state=open]:rotate-180" />
+                            <ChevronDown className="h-3 w-3 transition-transform duration-300 group-data-[state=open]:rotate-180" />
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="start" className="w-48 rounded-lg shadow-lg">
-                          {item.subItems?.map((subItem) => {
-                            const SubIcon = subItem.icon;
-                            return (
-                              <DropdownMenuItem key={subItem.name} asChild>
-                                <Link
-                                  href={subItem.href}
-                                  className="flex items-center gap-2 w-full text-gray-600 hover:text-[#b42519] hover:bg-[#b42519]/5"
-                                >
-                                  <SubIcon className="h-4 w-4" />
-                                  {subItem.name}
-                                </Link>
-                              </DropdownMenuItem>
-                            );
-                          })}
+                        
+                        {/* Default dropdown behavior */}
+                        <DropdownMenuContent
+                          align="start"
+                          sideOffset={12} 
+                          className="w-52 rounded-xl shadow-2xl border border-gray-100 bg-white/95 backdrop-blur-md p-2"
+                        >
+                          {item.subItems?.map((subItem) => (
+                            <DropdownMenuItem key={subItem.name} asChild>
+                              <Link
+                                href={subItem.href}
+                                className="flex items-center gap-3 w-full px-3 py-2.5 text-sm text-gray-600 rounded-lg transition-all hover:text-[#b42519] hover:bg-[#b42519]/5 cursor-pointer"
+                              >
+                                <subItem.icon className="h-4 w-4" />
+                                {subItem.name}
+                              </Link>
+                            </DropdownMenuItem>
+                          ))}
                         </DropdownMenuContent>
                       </DropdownMenu>
                     ) : (
                       <Link
                         href={item.href}
-                        className="flex items-center gap-2 text-gray-600 hover:text-[#b42519] transition-colors font-medium px-2 py-1 rounded-md hover:bg-[#b42519]/5"
+                        className={cn(
+                          "relative flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-[#b42519] transition-all font-medium rounded-full hover:bg-[#b42519]/5 group",
+                          isScrolled ? "text-sm" : "text-base"
+                        )}
                       >
                         <Icon className="h-4 w-4" />
                         {item.name}
+                        
+                        {/* Tab Indicator (Garis bawah yang muncul saat hover atau aktif) */}
+                        <span className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-[#b42519] transition-all duration-300 group-hover:w-1/2 group-hover:left-1/4" />
                       </Link>
                     )}
                   </div>
                 );
               })}
             </div>
-
+              
             {/* Auth Buttons */}
             <div className="hidden md:flex items-center gap-3">
               <Link href="https://app.shineeducationbali.test/login">
@@ -135,12 +154,12 @@ const Navbar = () => {
                   Masuk
                 </Button>
               </Link>
-              <Link href="https://app.shineeducationbali.test/register">
+              {/* <Link href="https://app.shineeducationbali.test/register">
                 <Button className="bg-[#b42519] text-white hover:bg-[#7a160d] flex items-center gap-2 shadow-md">
                   <UserPlus className="h-4 w-4" />
                   Daftar
                 </Button>
-              </Link>
+              </Link> */}
             </div>
 
             {/* Mobile Menu Button */}
@@ -192,20 +211,35 @@ const Navbar = () => {
                 const Icon = item.icon;
                 return (
                   <div key={item.name}>
-                    {item.isDropdown ? (
-                      <div className="flex flex-col">
-                        <div className="flex items-center gap-2 text-gray-900 font-medium py-2">
-                          <Icon className="h-4 w-4" />
-                          {item.name}
-                        </div>
-                        <div className="ml-6 flex flex-col gap-2">
+                {item.isDropdown ? (
+                  <div className="flex flex-col">
+                    <button
+                      type="button"
+                      onClick={() => setIsMobileOthersOpen((v) => !v)}
+                      className="flex items-center justify-between text-gray-900 font-medium py-2"
+                    >
+                      <span className="flex items-center gap-2">
+                        <Icon className="h-4 w-4" />
+                        {item.name}
+                      </span>
+                      <ChevronDown
+                        className={cn(
+                          "h-4 w-4 transition-transform duration-300 ease-in-out",
+                          isMobileOthersOpen ? "rotate-180" : "rotate-0"
+                        )}
+                      />
+                    </button>
+
+                    {isMobileOthersOpen && (
+                      <div className="overflow-hidden bg-gray-50/50 rounded-lg">
+                        <div className="flex flex-col gap-2 pl-8 pr-4 py-2 border-l-2 border-[#b42519]/20 ml-2 my-1">
                           {item.subItems?.map((subItem) => {
                             const SubIcon = subItem.icon;
                             return (
                               <Link
                                 key={subItem.name}
                                 href={subItem.href}
-                                className="flex items-center gap-2 text-gray-600 hover:text-[#b42519] transition-colors py-1"
+                                className="flex items-center gap-2 text-gray-600 hover:text-[#b42519] transition-colors py-1.5"
                                 onClick={() => setIsMobileMenuOpen(false)}
                               >
                                 <SubIcon className="h-4 w-4" />
@@ -215,7 +249,9 @@ const Navbar = () => {
                           })}
                         </div>
                       </div>
-                    ) : (
+                    )}
+                  </div>
+                ) : (
                       <Link
                         href={item.href}
                         className="flex items-center gap-2 text-gray-600 hover:text-[#b42519] transition-colors py-2"
