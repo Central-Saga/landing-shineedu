@@ -15,6 +15,11 @@
 - **"URL API belum dikonfigurasi"** → Set `NEXT_PUBLIC_API_BASE_URL` di `.env.local` (landing).
 - **"Koneksi gagal" / network error** → Cek URL API, CORS, dan koneksi ke server.
 - **422 / validation error** → Pesan dari backend (mis. email invalid, resume wajib). Perbaiki input sesuai pesan.
+- **502 Bad Gateway / "Failed to fetch"** → Sering karena backend (Laravel/PHP) crash atau tidak merespons sebelum Caddy timeout. Cek:
+  - Container/service API (api:8000) benar-benar jalan.
+  - Di api-shineedu: `php artisan migrate` dan `job_vacancies` punya baris (position_id dari form harus ada di tabel).
+  - PHP `post_max_size` / `upload_max_filesize` cukup untuk file CV (min 5MB).
+  - Setelah perbaikan kode (service hanya kirim data fillable ke Model::create; controller pakai try-catch), error akan jadi 500 JSON dengan pesan jelas, bukan 502 kosong.
 
 ### 3. Pantau status: "Lamaran tidak ditemukan"
 

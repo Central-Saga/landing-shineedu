@@ -69,3 +69,5 @@ Implementasi yang disarankan:
 - **Hapus** auto-hide setelah 15 detik.
 
 Dengan begitu, konfirmasi “bagus” dalam arti: **tampil terus sampai user siap menutup**, tanpa hilang tiba-tiba.
+
+**Catatan:** Perubahan ini (auto-hide dihapus, tombol Tutup) **tidak menyebabkan** error fetch / 502. Alurnya: fetch dipanggil sekali saat user klik “Kirim Lamaran”; hanya setelah respons sukses, konfirmasi dan tracking code ditampilkan. Tombol “Tutup” hanya mereset state tampilan; tidak memicu request ke API. Jika masih muncul “Failed to fetch” atau 502, penyebabnya di sisi backend/jaringan (lihat `docs/job-applications-troubleshooting.md`).

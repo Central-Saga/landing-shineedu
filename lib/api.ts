@@ -194,7 +194,13 @@ export async function submitJobApplication(
   });
   const json = await res.json().catch(() => ({}));
   if (!res.ok) {
-    const msg = getApiErrorMessage(json, res.status === 0 ? "Koneksi gagal. Cek jaringan atau CORS." : res.statusText || "Gagal mengirim lamaran.");
+    const fallback =
+      res.status === 0
+        ? "Koneksi gagal. Cek jaringan atau CORS."
+        : res.status === 502
+          ? "Server API sibuk atau bermasalah (502). Coba lagi beberapa saat atau hubungi admin."
+          : res.statusText || "Gagal mengirim lamaran.";
+    const msg = getApiErrorMessage(json, fallback);
     throw new Error(msg);
   }
   const data = (json as { data?: JobApplicationSubmitResponse })?.data ?? (json as Record<string, unknown>);
