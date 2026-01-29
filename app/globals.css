@@ -103,6 +103,11 @@
     @apply border-border;
   }
 
+  html {
+    /* Reserve space for scrollbar so layout doesn't shift when dropdown opens/closes */
+    scrollbar-gutter: stable;
+  }
+
   body {
     @apply bg-white text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
