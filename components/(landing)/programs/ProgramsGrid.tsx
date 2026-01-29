@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Container } from "../Container";
-import type { Program } from "@/data/landing/programs";
+import type { Program } from "@/data/(landing)/programs";
 
 interface ProgramsGridProps {
   programData: Program[];

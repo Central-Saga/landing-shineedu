@@ -4,7 +4,7 @@ import {
   subscriptionPlans,
   facilities,
   educationLevels,
-} from "@/data/landing/subscription";
+} from "@/data/(landing)/homes/subscription";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -48,13 +48,13 @@ const Langganan = () => {
                     </div>
                   </div>
                   
-                  <ul className="space-y-3 flex-grow">
+                  <ul className="space-y-3 grow">
                     {plan.features.map((feature, idx) => (
                       <li
                         key={idx}
                         className="flex items-start gap-3 text-gray-600"
                       >
-                        <CheckCircle2 className="h-5 w-5 text-[#d2a741] mt-0.5 flex-shrink-0" />
+                        <CheckCircle2 className="h-5 w-5 text-[#d2a741] mt-0.5 shrink-0" />
                         <span className="text-sm">{feature}</span>
                       </li>
                     ))}
@@ -123,7 +123,7 @@ const Langganan = () => {
                       key={index}
                       className="flex items-start gap-4 group"
                     >
-                      <div className="flex-shrink-0">
+                      <div className="shrink-0">
                         <div className="w-12 h-12 rounded-full flex items-center justify-center bg-[#b42519]/10 group-hover:bg-[#b42519]/20 transition-colors">
                           <svg
                             className="w-6 h-6 text-[#b42519]"

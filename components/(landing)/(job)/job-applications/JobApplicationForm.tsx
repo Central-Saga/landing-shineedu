@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/select";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { CheckCircle2 } from "lucide-react";
-import { availablePositions } from "@/data/landing/job-applications";
+import { availablePositions } from "@/data/(landing)/(job)/job-applications/job-applications";
 import { cn } from "@/lib/utils";
 
 type FormData = {
@@ -131,7 +131,7 @@ export function JobApplicationForm() {
   };
 
   return (
-    <>
+    <div className="[scrollbar-gutter:stable]">
       {submitSuccess && (
         <div className="mb-8">
           <Alert className="bg-green-50 border border-green-100 dark:bg-green-900/20 dark:border-green-800">
@@ -457,7 +457,7 @@ export function JobApplicationForm() {
           </div>
         </form>
       </div>
-    </>
+    </div>
   );
 }
 

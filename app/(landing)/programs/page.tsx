@@ -1,9 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Navbar from "@/components/(landing)/homes/Navbar";
-import Footer from "@/components/(landing)/homes/Footer";
-import { LightBackground } from "@/components/animations/BackgroundAnimations";
+import { LandingPageLayout } from "@/components/(landing)/LandingPageLayout";
 import {
   ProgramsHero,
   ProgramsGrid,
@@ -12,7 +10,7 @@ import {
   TestimonialsSection,
   ProgramDetailModal,
 } from "@/components/(landing)/programs";
-import { programData } from "@/data/landing/programs";
+import { programData } from "@/data/(landing)/programs";
 
 const WHATSAPP_NUMBER = "6281237522400";
 
@@ -33,10 +31,7 @@ export default function ProgramsPage() {
     `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 
   return (
-    <main className="min-h-screen relative bg-white">
-      <LightBackground />
-      <Navbar />
-
+    <LandingPageLayout>
       <ProgramsHero />
       <ProgramsGrid
         programData={programData}
@@ -55,8 +50,6 @@ export default function ProgramsPage() {
           hubungiWaMessage={hubungiWaMessage}
         />
       )}
-
-      <Footer />
-    </main>
+    </LandingPageLayout>
   );
 }

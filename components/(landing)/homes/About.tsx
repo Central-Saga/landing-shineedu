@@ -30,7 +30,7 @@ const About = () => {
         <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12 max-w-6xl mx-auto">
           <div className="md:w-1/2 relative flex items-center justify-center w-full">
             <div className="absolute -inset-4 bg-[#b42519]/10 rounded-3xl blur-2xl opacity-50" />
-            <div className="relative rounded-3xl overflow-hidden shadow-xl w-full aspect-[4/3]">
+            <div className="relative rounded-3xl overflow-hidden shadow-xl w-full aspect-4/3">
               <div className="absolute inset-0">
                 <Image
                   src="/pichome/hero-section.jpg"

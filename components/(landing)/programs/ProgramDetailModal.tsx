@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
-import type { Program } from "@/data/landing/programs";
+import type { Program } from "@/data/(landing)/programs";
 
 interface ProgramDetailModalProps {
   selectedProgram: number | null;

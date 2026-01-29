@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Section } from "../Section";
 import { Container } from "../Container";
-import { programData } from "@/data/landing/programs";
+import { programData } from "@/data/(landing)/programs";
 
 const Program = () => {
   return (
