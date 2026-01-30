@@ -1,4 +1,11 @@
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/shineedu/repositories/landing-shineedu
-    - /bin/cp -R * $DEPLOYPATH
+    - export REPOPATH=/home/shineedu/repositories/landing-shineedu
+    - cd $REPOPATH
+
+    # install dependency + build (generate .next)
+    - npm install
+    - npm run build
+
+    # optional: restart passenger (kalau diperlukan)
+    - /usr/bin/touch $REPOPATH/tmp/restart.txt
