@@ -1,14 +1,13 @@
-"use client";
-
 import { LandingPageLayout } from "@/components/(landing)/LandingPageLayout";
 import { GalleryHero, GalleryGrid } from "@/components/(landing)/gallery";
-import { galleryItems } from "@/data/(landing)/gallery/gallery";
+import { fetchPublicGallery } from "@/lib/api";
 
-export default function GalleryPage() {
+export default async function GalleryPage() {
+  const items = await fetchPublicGallery();
   return (
     <LandingPageLayout>
       <GalleryHero />
-      <GalleryGrid items={galleryItems} />
+      <GalleryGrid items={items} />
     </LandingPageLayout>
   );
 }

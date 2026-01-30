@@ -71,6 +71,28 @@ function unwrapData<T>(out: ApiResponse<unknown>): T[] {
   return [];
 }
 
+/** Item dari API public/gallery (untuk halaman gallery landing). */
+export interface PublicGalleryItem {
+  id: number;
+  title: string;
+  alt?: string;
+  image_url: string;
+  sort_order?: number | null;
+  is_active?: boolean;
+}
+
+export async function fetchPublicGallery(): Promise<PublicGalleryItem[]> {
+  if (!BASE) return [];
+  try {
+    const res = await fetch(`${BASE}${publicPrefix}/gallery`);
+    const out = await handleRes<unknown>(res);
+    const raw = unwrapData<PublicGalleryItem>(out);
+    return raw ?? [];
+  } catch {
+    return [];
+  }
+}
+
 export async function fetchPublicJenjang(): Promise<Jenjang[]> {
   const res = await fetch(`${BASE}${publicPrefix}/catalog/jenjang?per_page=100`);
   const out = await handleRes<unknown>(res);
