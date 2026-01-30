@@ -6,10 +6,10 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import type { BlogPost } from "@/data/(landing)/blogs/blog-posts";
+import type { BlogPostShape } from "@/lib/api";
 
 interface BlogPostCardProps {
-  post: BlogPost;
+  post: BlogPostShape;
 }
 
 export function BlogPostCard({ post }: BlogPostCardProps) {

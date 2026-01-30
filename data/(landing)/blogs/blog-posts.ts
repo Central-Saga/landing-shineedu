@@ -1,4 +1,8 @@
-export interface BlogPost {
+/**
+ * Shape tampilan blog untuk card/list (selaras dengan BlogPostShape dari lib/api).
+ * Data live dari API public/blogs; file ini untuk tipe & fallback statis.
+ */
+export interface BlogPostDisplay {
   id: number;
   title: string;
   excerpt: string;
@@ -8,7 +12,7 @@ export interface BlogPost {
   author: string;
 }
 
-export const blogPosts: BlogPost[] = [
+export const blogPosts: BlogPostDisplay[] = [
   {
     id: 1,
     title: "5 Cara Efektif Membantu Anak Belajar Membaca",
