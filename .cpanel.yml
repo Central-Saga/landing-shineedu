@@ -1,0 +1,4 @@
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/shineedu/repositories/landing-shineedu
+    - /bin/cp -R * $DEPLOYPATH
