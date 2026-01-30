@@ -93,6 +93,115 @@ export async function fetchPublicGallery(): Promise<PublicGalleryItem[]> {
   }
 }
 
+/** Blog item dari API public/blogs (untuk halaman blog landing). */
+export interface PublicBlogAuthor {
+  id: number;
+  name: string;
+  email: string;
+}
+
+export interface PublicBlogAsset {
+  id: number;
+  file_url: string;
+  title?: string | null;
+  description?: string | null;
+}
+
+export interface PublicBlogItem {
+  id: number;
+  title: string;
+  content: string;
+  status: string;
+  category: string;
+  created_at: string;
+  updated_at: string;
+  author?: PublicBlogAuthor | null;
+  assets?: PublicBlogAsset[];
+}
+
+export async function fetchPublicBlogs(params?: {
+  per_page?: number;
+  category?: string;
+}): Promise<PublicBlogItem[]> {
+  if (!BASE) return [];
+  try {
+    const qs = params
+      ? new URLSearchParams(
+          Object.fromEntries(
+            Object.entries(params).filter(([, v]) => v != null)
+          ) as Record<string, string>
+        ).toString()
+      : "";
+    const res = await fetch(
+      `${BASE}${publicPrefix}/blogs${qs ? `?${qs}` : ""}`
+    );
+    const out = await handleRes<unknown>(res);
+    const raw = unwrapData<PublicBlogItem>(out);
+    return raw ?? [];
+  } catch {
+    return [];
+  }
+}
+
+export async function fetchPublicBlog(id: number): Promise<PublicBlogItem | null> {
+  if (!BASE) return null;
+  try {
+    const res = await fetch(`${BASE}${publicPrefix}/blogs/${id}`);
+    if (!res.ok) return null;
+    const out = await handleRes<PublicBlogItem>(res);
+    const data = out?.data as PublicBlogItem | undefined;
+    return data ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/** Strip HTML tags and truncate for excerpt. */
+function stripHtml(html: string, maxLen = 160): string {
+  const text = html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+  if (text.length <= maxLen) return text;
+  return text.slice(0, maxLen).trim() + "…";
+}
+
+/** Map API blog item to BlogPost shape for grid/card. */
+export interface BlogPostShape {
+  id: number;
+  title: string;
+  excerpt: string;
+  image: string;
+  category: string;
+  date: string;
+  author: string;
+}
+
+const CATEGORY_LABEL: Record<string, string> = {
+  tips: "Tips",
+  travel: "Travel",
+  trips: "Trips",
+};
+
+export function mapPublicBlogToPost(item: PublicBlogItem): BlogPostShape {
+  const image =
+    item.assets?.[0]?.file_url ?? "/pichome/hero-section.JPG";
+  const date =
+    item.created_at != null
+      ? new Date(item.created_at).toLocaleDateString("id-ID", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        })
+      : "";
+  return {
+    id: item.id,
+    title: item.title,
+    excerpt: stripHtml(item.content ?? ""),
+    image,
+    category: CATEGORY_LABEL[item.category] ?? item.category,
+    date,
+    author: item.author?.name ?? "",
+  };
+}
+
 export async function fetchPublicJenjang(): Promise<Jenjang[]> {
   const res = await fetch(`${BASE}${publicPrefix}/catalog/jenjang?per_page=100`);
   const out = await handleRes<unknown>(res);

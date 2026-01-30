@@ -2,10 +2,10 @@
 
 import { Container } from "../Container";
 import { BlogPostCard } from "./BlogPostCard";
-import type { BlogPost } from "@/data/(landing)/blogs/blog-posts";
+import type { BlogPostShape } from "@/lib/api";
 
 interface BlogsGridProps {
-  posts: BlogPost[];
+  posts: BlogPostShape[];
 }
 
 export function BlogsGrid({ posts }: BlogsGridProps) {

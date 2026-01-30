@@ -6,13 +6,15 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import type { BlogPost } from "@/data/(landing)/blogs/blog-posts";
+import type { BlogPostShape } from "@/lib/api";
 
 interface BlogPostCardProps {
-  post: BlogPost;
+  post: BlogPostShape;
 }
 
 export function BlogPostCard({ post }: BlogPostCardProps) {
+  const isExternalImage = post.image.startsWith("http");
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -23,13 +25,21 @@ export function BlogPostCard({ post }: BlogPostCardProps) {
       <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
         <div className="relative h-52 overflow-hidden flex items-center justify-center">
           <div className="absolute inset-0">
-            <Image
-              src={post.image}
-              alt={post.title}
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            />
+            {isExternalImage ? (
+              <img
+                src={post.image}
+                alt={post.title}
+                className="object-cover w-full h-full"
+              />
+            ) : (
+              <Image
+                src={post.image}
+                alt={post.title}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              />
+            )}
           </div>
           <div className="absolute top-4 left-4 z-10">
             <Badge className="bg-white/90 text-[#b42519] hover:bg-white shadow-md rounded-full">
