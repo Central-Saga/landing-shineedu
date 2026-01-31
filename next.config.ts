@@ -1,10 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Ini wajib supaya Next.js membuat folder "out/"
-  output: "export",
-
   // Ini wajib supaya next/image tidak error di static hosting
+  // Walaupun sekarang dynamic, tetap baik untuk optimasi jika diperlukan
   images: {
     unoptimized: true,
   },
