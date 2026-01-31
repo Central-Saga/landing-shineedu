@@ -1,6 +1,6 @@
 // Base URL API: client (browser) vs server (SSR).
 // Di Docker, SSR harus pakai API_SERVER_URL (http://api:8000/...) agar container landing bisa reach container API.
-const DEFAULT_API_BASE = "https://api.shineeducationbali.test/api/v2";
+const DEFAULT_API_BASE = "https://api.shineeducationbali.com/api/v2";
 
 function getApiBase(): string {
   const fromEnv =
@@ -364,7 +364,7 @@ export async function submitJobApplication(
 ): Promise<JobApplicationSubmitResponse> {
   const url = `${apiBase()}${publicPrefix}/job-applications`;
   if (!apiBase()) {
-    throw new Error("URL API belum dikonfigurasi. Set NEXT_PUBLIC_API_BASE_URL (mis. https://api.shineeducationbali.test/api/v2)");
+    throw new Error("URL API belum dikonfigurasi. Set NEXT_PUBLIC_API_BASE_URL (mis. https://api.shineeducationbali.com/api/v2)");
   }
   const res = await fetch(url, {
     method: "POST",
