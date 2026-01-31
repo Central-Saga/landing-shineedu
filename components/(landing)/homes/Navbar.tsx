@@ -148,7 +148,7 @@ const Navbar = () => {
               
             {/* Auth Buttons */}
             <div className="hidden md:flex items-center gap-3">
-              <Link href="https://app.shineeducationbali.test/login">
+              <Link href="https://app.shineeducationbali.com/login">
                 <Button variant="ghost" className="text-[#b42519] flex items-center gap-2 hover:text-[#7a160d]">
                   <LogIn className="h-4 w-4" />
                   Masuk
@@ -265,7 +265,7 @@ const Navbar = () => {
                 );
               })}
               <div className="flex flex-col gap-2 pt-4 border-t border-gray-200">
-                <Link href="https://app.shineeducationbali.test/login">
+                <Link href="https://app.shineeducationbali.com/login">
                   <Button
                     variant="ghost"
                     className="w-full text-[#b42519] flex items-center gap-2 hover:text-[#7a160d]"
@@ -275,7 +275,7 @@ const Navbar = () => {
                     Masuk
                   </Button>
                 </Link>
-                <Link href="https://app.shineeducationbali.test/register">
+                <Link href="https://app.shineeducationbali.com/register">
                   <Button
                     className="w-full bg-[#b42519] text-white hover:bg-[#7a160d] flex items-center gap-2 shadow-md"
                     onClick={() => setIsMobileMenuOpen(false)}
