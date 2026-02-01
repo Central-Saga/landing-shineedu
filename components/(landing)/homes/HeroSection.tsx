@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { GraduationCap, BookOpen, Star } from "lucide-react";
@@ -46,20 +47,26 @@ const HeroSection = () => {
             </div>
 
             <div className="flex flex-wrap gap-4 justify-center lg:justify-start pt-4">
-              <Button 
+              <Button
                 size="lg"
                 className="bg-[#b42519] text-white px-8 py-6 rounded-full text-lg font-semibold hover:bg-[#7a160d] shadow-md hover:shadow-lg transition-all duration-300 flex items-center gap-2"
+                asChild
               >
-                <GraduationCap className="h-5 w-5" />
-                Mulai Belajar
+                <Link href="/programs">
+                  <GraduationCap className="h-5 w-5" />
+                  Mulai Belajar
+                </Link>
               </Button>
               <Button
                 variant="outline"
                 size="lg"
                 className="px-8 py-6 rounded-full text-lg font-semibold border-2 border-[#b42519] text-[#b42519] hover:bg-[#b42519] hover:text-white transition-all duration-300 flex items-center gap-2 bg-white"
+                asChild
               >
-                <BookOpen className="h-5 w-5" />
-                Pelajari Selengkapnya
+                <Link href="/about">
+                  <BookOpen className="h-5 w-5" />
+                  Pelajari Selengkapnya
+                </Link>
               </Button>
             </div>
           </div>
