@@ -26,7 +26,6 @@ const QUICK_LINKS = [
   { label: "Blog", href: "/blog", icon: FileText },
   { label: "Job Vacancies", href: "/job-vacancies", icon: Briefcase },
   { label: "Job Applications", href: "/job-applications", icon: UserPlus },
-  { label: "Kontak", href: "/kontak", icon: MessageCircle },
 ];
 
 const Footer = () => {

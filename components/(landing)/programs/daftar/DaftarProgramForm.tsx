@@ -27,9 +27,6 @@ import { DataWaliSection } from "./DataWaliSection";
 import { ProdukLayananSection } from "./ProdukLayananSection";
 import { PeriodeSection } from "./PeriodeSection";
 import { BiayaSection } from "./BiayaSection";
-import { BiayaPendaftaranSection } from "./BiayaPendaftaranSection";
-
-type BiayaStatus = "UNPAID" | "PAID" | "WAIVED";
 
 interface DaftarProgramFormProps {
   programIdParam: string | null;
@@ -61,9 +58,6 @@ export function DaftarProgramForm({
   );
   const [tanggalSelesai, setTanggalSelesai] = useState("");
   const [catatan, setCatatan] = useState("");
-  const [biayaPendaftaran, setBiayaPendaftaran] = useState(0);
-  const [biayaStatus, setBiayaStatus] = useState<BiayaStatus>("WAIVED");
-  const [biayaDueDate, setBiayaDueDate] = useState("");
 
   useEffect(() => {
     const load = async () => {
@@ -225,9 +219,9 @@ export function DaftarProgramForm({
         tanggal_mulai: tanggalMulai || undefined,
         tanggal_selesai: tanggalSelesai || undefined,
         catatan: catatan || undefined,
-        biaya_pendaftaran_amount: biayaPendaftaran,
-        biaya_pendaftaran_status: biayaStatus,
-        biaya_pendaftaran_due_date: biayaDueDate || undefined,
+        biaya_pendaftaran_amount: 0,
+        biaya_pendaftaran_status: "WAIVED",
+        biaya_pendaftaran_due_date: undefined,
       };
       await submitLandingRegister(payload);
       onSuccess();
@@ -320,20 +314,6 @@ export function DaftarProgramForm({
                     programId={programId}
                     jenjangId={jenjangId}
                     paketId={paketId}
-                  />
-                </AccordionContent>
-              </AccordionItem>
-
-              <AccordionItem value="data-biaya-pendaftaran">
-                <AccordionTrigger>Biaya Pendaftaran</AccordionTrigger>
-                <AccordionContent>
-                  <BiayaPendaftaranSection
-                    biayaPendaftaran={biayaPendaftaran}
-                    setBiayaPendaftaran={setBiayaPendaftaran}
-                    biayaStatus={biayaStatus}
-                    setBiayaStatus={setBiayaStatus}
-                    biayaDueDate={biayaDueDate}
-                    setBiayaDueDate={setBiayaDueDate}
                   />
                 </AccordionContent>
               </AccordionItem>
