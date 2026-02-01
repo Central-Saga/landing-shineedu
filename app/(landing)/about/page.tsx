@@ -9,7 +9,12 @@ import {
   AboutJourney,
   AboutCta,
 } from "@/components/(landing)/about";
-import { teamMembers, milestones } from "@/data/(landing)/abouts/about";
+import {
+  owner,
+  pengelolaByBidang,
+  teachersBySubject,
+  milestones,
+} from "@/data/(landing)/abouts/about";
 
 export default function AboutPage() {
   return (
@@ -17,7 +22,11 @@ export default function AboutPage() {
       <AboutHero />
       <AboutStory />
       <AboutVisionMission />
-      <AboutTeam teamMembers={teamMembers} />
+      <AboutTeam
+        owner={owner}
+        pengelolaByBidang={pengelolaByBidang}
+        teachersBySubject={teachersBySubject}
+      />
       <AboutJourney milestones={milestones} />
       <AboutCta />
     </LandingPageLayout>
