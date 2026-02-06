@@ -21,11 +21,11 @@ import {
   type PaketHargaItem,
   type LandingRegisterPayload,
 } from "@/lib/api";
-import { defaultMurid, defaultWali, type MuridState, type WaliState } from "./types";
-import { DataMuridSection } from "./DataMuridSection";
-import { DataWaliSection } from "./DataWaliSection";
-import { ProdukLayananSection } from "./ProdukLayananSection";
-import { PeriodeSection } from "./PeriodeSection";
+import { defaultMurid, defaultWali, type MuridState, type WaliState } from "./_components/types";
+import { DataMuridSection } from "./_components/DataMuridSection";
+import { DataWaliSection } from "./_components/DataWaliSection";
+import { ProdukLayananSection } from "./_components/ProdukLayananSection";
+import { PeriodeSection } from "./_components/PeriodeSection";
 import { BiayaSection } from "./BiayaSection";
 
 interface DaftarProgramFormProps {

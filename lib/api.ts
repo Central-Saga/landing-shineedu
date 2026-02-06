@@ -35,6 +35,11 @@ export interface Program {
   id: number;
   nama: string;
   kode?: string;
+  deskripsi?: string | null;
+  image?: string | null;
+  fitur?: string[];
+  status?: string;
+  is_highlight?: boolean;
   jenjangs?: { id: number; nama: string }[];
 }
 
@@ -262,6 +267,15 @@ export async function fetchPublicProgram(): Promise<Program[]> {
   return unwrapData<Program>(out);
 }
 
+/** Program unggulan untuk landing home (hanya is_highlight = true). */
+export async function fetchPublicProgramHighlighted(): Promise<Program[]> {
+  const res = await fetch(
+    `${apiBase()}${publicPrefix}/catalog/program?per_page=100&highlight=1`
+  );
+  const out = await handleRes<unknown>(res);
+  return unwrapData<Program>(out);
+}
+
 export async function fetchPublicPaketHarga(params: {
   program_id: number;
   jenjang_id: number;
@@ -428,4 +442,93 @@ export async function trackJobApplication(
     created_at: data.created_at ?? null,
     updated_at: data.updated_at ?? null,
   };
+}
+
+// --- Job Vacancies (Lowongan Kerja) - data dari API backend ---
+
+/** Response item dari GET /public/job-vacancies (JobVacancyResource). */
+export interface PublicJobVacancyItem {
+  id: number;
+  title: string;
+  location: string;
+  employment_type: string;
+  description?: string | null;
+  posted_at?: string | null;
+  end_at?: string | null;
+  requirements?: string[];
+  responsibilities?: string[];
+  benefits?: string[];
+  is_active?: boolean;
+  created_at?: string | null;
+  updated_at?: string | null;
+}
+
+/** Shape UI job vacancy (selaras dengan JobVacancy di data/job-vacancies). */
+export interface JobVacancyUI {
+  id: number;
+  title: string;
+  location: string;
+  type: string;
+  postedDate: string;
+  endDate: string;
+  requirements: string[];
+  responsibilities: string[];
+  benefits: string[];
+  description: string;
+}
+
+function formatDateId(dateStr: string | null | undefined): string {
+  if (!dateStr) return "-";
+  const d = new Date(dateStr);
+  if (Number.isNaN(d.getTime())) return "-";
+  return d.toLocaleDateString("id-ID", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+
+/** Map response API ke shape UI (JobVacancy). */
+export function mapPublicJobToVacancy(item: PublicJobVacancyItem): JobVacancyUI {
+  return {
+    id: item.id,
+    title: item.title,
+    location: item.location ?? "",
+    type: item.employment_type ?? "Full-time",
+    postedDate: formatDateId(item.posted_at),
+    endDate: formatDateId(item.end_at),
+    requirements: Array.isArray(item.requirements) ? item.requirements : [],
+    responsibilities: Array.isArray(item.responsibilities) ? item.responsibilities : [],
+    benefits: Array.isArray(item.benefits) ? item.benefits : [],
+    description: item.description ?? "",
+  };
+}
+
+/**
+ * Daftar lowongan kerja publik dari API GET /public/job-vacancies.
+ * Hanya lowongan is_active yang dikembalikan backend.
+ * Melempar error jika request gagal (termasuk 502) agar halaman bisa tampilkan pesan error.
+ */
+export async function fetchPublicJobVacancies(): Promise<JobVacancyUI[]> {
+  const base = apiBase();
+  if (!base) {
+    throw new Error("URL API belum dikonfigurasi (NEXT_PUBLIC_API_BASE_URL).");
+  }
+  const res = await fetch(`${base}${publicPrefix}/job-vacancies`, {
+    cache: "no-store",
+    headers: { Accept: "application/json" },
+  });
+  if (!res.ok) {
+    const msg =
+      res.status === 502
+        ? "Server API tidak merespons (502). Pastikan backend API jalan dan Caddy mengarah ke container/port yang benar."
+        : res.status === 0
+          ? "Koneksi gagal. Cek jaringan atau CORS."
+          : `Gagal memuat lowongan (${res.status}). Coba lagi nanti.`;
+    throw new Error(msg);
+  }
+  const out = await handleRes<unknown>(res);
+  const raw = unwrapData<PublicJobVacancyItem>(out);
+  if (!Array.isArray(raw)) return [];
+  return raw.map(mapPublicJobToVacancy);
 }

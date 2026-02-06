@@ -6,7 +6,7 @@ import {
   DaftarProgramLayout,
   DaftarProgramSuccess,
   DaftarProgramForm,
-} from "@/components/(landing)/programs/daftar";
+} from ".";
 
 export default function DaftarProgramPage() {
   const searchParams = useSearchParams();

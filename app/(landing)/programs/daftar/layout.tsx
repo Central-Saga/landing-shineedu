@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { DaftarProgramLayout } from "@/components/(landing)/programs/daftar";
+import { DaftarProgramLayout } from ".";
 
 export default function DaftarLayout({
   children,

@@ -16,7 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { Container } from "../Container";
+import { Container } from "./Container";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);

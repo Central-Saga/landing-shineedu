@@ -16,7 +16,7 @@ import {
   Briefcase,
   UserPlus,
 } from "lucide-react";
-import { Container } from "../Container";
+import { Container } from "./Container";
 
 const QUICK_LINKS = [
   { label: "Beranda", href: "/", icon: Home },
@@ -81,17 +81,17 @@ const Footer = () => {
             <h3 className="font-semibold mb-4 text-gray-900">Contact Info</h3>
             <ul className="space-y-3">
               <li className="flex items-start gap-3">
-                <MapPin className="w-5 h-5 mt-0.5 text-[#b42519] flex-shrink-0" />
+                <MapPin className="w-5 h-5 mt-0.5 text-[#b42519] shrink-0" />
                 <span className="text-gray-600 text-sm">Jl. Bakisan, Denbantas, Kec. Tabanan, Kabupaten Tabanan, Bali 82123</span>
               </li>
               <li className="flex items-center gap-3">
-                <Phone className="w-5 h-5 text-[#b42519] flex-shrink-0" />
+                <Phone className="w-5 h-5 text-[#b42519] shrink-0" />
                 <a href="https://wa.me/6281237522400" className="text-gray-600 text-sm hover:text-[#b42519]" target="_blank" rel="noopener noreferrer">
                   +62 812-3752-2400
                 </a>
               </li>
               <li className="flex items-center gap-3">
-                <Mail className="w-5 h-5 text-[#b42519] flex-shrink-0" />
+                <Mail className="w-5 h-5 text-[#b42519] shrink-0" />
                 <a href="mailto:yayasanpendidikangemilangbali@gmail.com" className="text-gray-600 text-sm hover:text-[#b42519]">
                   yayasanpendidikangemilangbali@gmail.com
                 </a>
@@ -101,9 +101,12 @@ const Footer = () => {
         </div>
 
         {/* Copyright */}
-        <div className="border-t border-gray-200 mt-12 pt-8 text-center">
+        <div className="border-t border-gray-200 mt-12 pt-8 text-center space-y-1">
           <p className="text-sm text-gray-500">
             © {new Date().getFullYear()} Shine Education. All rights reserved.
+          </p>
+          <p className="text-sm text-gray-500">
+            Dikembangkan oleh Central Saga Mandala ~ Dedikasi kreatif untuk menumbuhkan setiap potensi menjadi prestasi.
           </p>
         </div>
       </Container>
