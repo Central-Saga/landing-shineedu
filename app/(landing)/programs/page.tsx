@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { LandingPageLayout } from "@/components/(landing)/LandingPageLayout";
+import { Section } from "@/components/(landing)/Section";
+import { Container } from "@/components/(landing)/Container";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { fetchPublicProgram, type Program as ApiProgram } from "@/lib/api";
@@ -62,21 +64,6 @@ function mapApiProgramToUI(p: ApiProgram): ProgramDisplay {
 function buildWhatsappUrl(phone: string, message: string) {
   return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
 }
-
-/** Container dengan spacing horizontal lebih lebar (padding/margin x). */
-const SectionContainer = ({
-  children,
-  className = "",
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) => (
-  <div
-    className={`mx-auto max-w-7xl px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 ${className}`}
-  >
-    {children}
-  </div>
-);
 
 const whyChooseItems = [
   {
@@ -179,8 +166,8 @@ export default function ProgramsPage() {
   return (
     <LandingPageLayout>
       {/* Hero */}
-      <section className="pt-24 pb-16 md:pt-32 md:pb-24 bg-white relative z-10">
-        <SectionContainer>
+      <Section padding="lg" className="pt-24 md:pt-32">
+        <Container maxWidth="7xl" className="relative z-10">
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -197,12 +184,12 @@ export default function ProgramsPage() {
             </p>
             <div className="w-24 h-1 bg-[#b42519] mx-auto mb-10" />
           </motion.div>
-        </SectionContainer>
-      </section>
+        </Container>
+      </Section>
 
       {/* Grid Program (data dari API) */}
-      <section className="py-8 md:py-12 relative overflow-hidden bg-white">
-        <SectionContainer className="relative z-10">
+      <Section className="relative overflow-hidden">
+        <Container maxWidth="7xl" className="relative z-10">
           {error && (
             <div className="mb-6 p-4 rounded-lg bg-red-50 text-red-700 text-center">
               {error}
@@ -284,12 +271,12 @@ export default function ProgramsPage() {
               Belum ada program tersedia saat ini.
             </p>
           )}
-        </SectionContainer>
-      </section>
+        </Container>
+      </Section>
 
       {/* Why Choose Us */}
-      <section className="py-16 md:py-24 bg-white">
-        <SectionContainer>
+      <Section>
+        <Container maxWidth="7xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -333,12 +320,12 @@ export default function ProgramsPage() {
               );
             })}
           </div>
-        </SectionContainer>
-      </section>
+        </Container>
+      </Section>
 
       {/* CTA */}
-      <section className="py-16 md:py-20 bg-white">
-        <SectionContainer>
+      <Section>
+        <Container maxWidth="7xl">
           <div className="max-w-5xl mx-auto bg-[#b42519] rounded-2xl p-8 md:p-12 shadow-2xl">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
               <div>
@@ -400,12 +387,12 @@ export default function ProgramsPage() {
               </div>
             </div>
           </div>
-        </SectionContainer>
-      </section>
+        </Container>
+      </Section>
 
       {/* Testimonials */}
-      <section className="py-16 bg-white">
-        <SectionContainer>
+      <Section>
+        <Container maxWidth="7xl">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#b42519]">
               Apa Kata Mereka?
@@ -441,8 +428,8 @@ export default function ProgramsPage() {
               </Card>
             ))}
           </div>
-        </SectionContainer>
-      </section>
+        </Container>
+      </Section>
 
       {/* Modal Detail Program */}
       {selectedProgram !== null && (
