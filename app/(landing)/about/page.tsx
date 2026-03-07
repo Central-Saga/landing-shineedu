@@ -5,6 +5,7 @@ import {
   AboutHero,
   AboutStory,
   AboutVisionMission,
+  AboutServices,
   AboutTeam,
   AboutJourney,
   AboutCta,
@@ -22,6 +23,7 @@ export default function AboutPage() {
       <AboutHero />
       <AboutStory />
       <AboutVisionMission />
+      <AboutServices />
       <AboutTeam
         owner={owner}
         pengelolaByBidang={pengelolaByBidang}

@@ -26,25 +26,16 @@ export function AboutStory() {
             </h2>
             <div className="space-y-4 text-gray-600">
               <p>
-                Shine Education didirikan pada tahun 2018 dengan visi untuk
-                menghadirkan pendidikan berkualitas yang dapat diakses oleh semua
-                kalangan. Berawal dari sebuah ruangan kecil di Denpasar dengan
-                hanya 15 siswa, kini kami telah berkembang menjadi institusi
-                pendidikan yang dipercaya oleh ratusan keluarga di Bali.
+                Bagi kami, setiap meja di ruang kelas bukan sekadar tempat duduk, melainkan peluncur bagi mimpi-mimpi besar. Sejak membuka pintu pertama kali pada 2019, kami tidak pernah percaya pada konsep siswa rata-rata. Kami melihat percikan jenius dalam diri setiap anak yang mungkin selama ini tertutup oleh tumpukan rumus yang membosankan atau soal logika yang rumit. Ratusan alumni kami telah membuktikannya; dari yang awalnya ragu menatap lembar ujian, kini mereka bangga mengenakan jaket almamater kampus impian atau memimpin peringkat di sekolahnya.
               </p>
               <p>
-                Filosofi pendidikan kami berlandaskan pada keyakinan bahwa
-                setiap anak memiliki potensi unik yang perlu dieksplorasi dan
-                dikembangkan. Kami tidak hanya fokus pada pencapaian akademik,
-                tetapi juga pembentukan karakter dan keterampilan hidup yang
-                esensial.
+                Kami bukan sekadar barisan pengajar dengan tumpukan gelar, melainkan partner petualangan intelektual bagi para siswa. Di sini, pengajar kami adalah mentor yang tahu kapan harus memberi tantangan dan kapan harus memberikan semangat. Kami meninggalkan metode hafalan kuno yang kaku dan menggantinya dengan diskusi interaktif yang memicu rasa ingin tahu. Kami percaya bahwa saat seorang siswa mulai bertanya mengapa daripada sekadar bagaimana, di situlah keajaiban belajar yang sesungguhnya sedang terjadi.
               </p>
               <p>
-                Nama &quot;Shine&quot; dipilih karena kami percaya bahwa
-                pendidikan adalah cahaya yang dapat menerangi masa depan.
-                Melalui program-program inovatif dan pendekatan pembelajaran
-                yang menyenangkan, kami berusaha membantu setiap siswa untuk
-                bersinar dengan potensi terbaik mereka.
+                Belajar di sini tidak akan terasa seperti beban tambahan setelah seharian di sekolah, melainkan momen Aha! yang ditunggu-tunggu. 
+                Kami menciptakan atmosfer yang hangat dan personal, di mana setiap kesulitan akademik disambut dengan solusi kreatif, bukan tekanan. 
+                Dengan metode yang menyenangkan dan pendekatan yang menyentuh sisi unik tiap individu, kami tidak hanya mencetak peraih nilai sempurna, tapi juga membangun kepercayaan diri yang akan mereka bawa seumur hidup. 
+                Karena bagi kami, keberhasilan seorang siswa adalah perayaan bersama yang kami rawat dengan sepenuh hati.
               </p>
             </div>
           </div>

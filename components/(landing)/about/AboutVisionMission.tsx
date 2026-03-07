@@ -5,14 +5,13 @@ import { Container } from "../Container";
 import { Star, CheckCircle2 } from "lucide-react";
 
 const visionText =
-  "Menjadi institusi pendidikan terdepan yang menghasilkan generasi unggul, kreatif, dan berkarakter, yang siap menghadapi tantangan global melalui pendekatan pembelajaran yang inovatif dan menyenangkan.";
+  "Sebagai Lembaga Kursus yang unggul di Tingkat Nasional dan menyelaraskan kualitas yang handal sesuai dengan kebutuhan peserta didik serta terus aktif dalam mencerdaskan kehidupan bangsa dan menciptakan generasi emas.";
 
 const missionItems = [
-  "Menyelenggarakan program pendidikan berkualitas yang disesuaikan dengan kebutuhan dan minat siswa.",
-  "Membangun lingkungan belajar yang kondusif, inspiratif, dan menyenangkan.",
-  "Mengembangkan metode pembelajaran inovatif yang memadukan pendekatan tradisional dan modern.",
-  "Membina karakter dan nilai-nilai positif dalam diri setiap siswa.",
-  "Menjalin kerjasama dengan orangtua dan komunitas untuk mendukung perkembangan siswa.",
+  "Menjadi Lembaga Kursus terbaik dan dipercaya oleh masyarakat.",
+  "Meningkatkan daya serap lulusan dan berdaya saing tinggi.",
+  "Mengintegrasikan pendidikan dan pelatihan dalam pengembangan keterampilan.",
+  "Mengintegrasikan teknologi dalam proses pembelajaran untuk hasil yang lebih maksimal.",
 ];
 
 export function AboutVisionMission() {
