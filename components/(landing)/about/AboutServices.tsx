@@ -90,10 +90,10 @@ export function AboutServices() {
           
           <div className="relative z-10">
             <h3 className="text-2xl md:text-3xl font-bold mb-4">
-              Bersama Shine Education, ayo raih prestasi terbaik dan wujudkan impian masa depan!
+              Semua program unggulan ini didukung oleh tenaga pendidik profesional
             </h3>
             <p className="text-xl text-[#d2a741] font-bold tracking-wide">
-              Smart Learning, Bright Future!
+              Mari kenalan dengan tutor & tim penggerak hebat di balik layar Shine Education! 👇
             </p>
           </div>
         </div>
