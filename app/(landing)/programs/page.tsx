@@ -19,6 +19,7 @@ interface ProgramDisplay {
   description: string;
   image: string;
   features: string[];
+  jenjangs: string[];
 }
 
 const WHATSAPP_NUMBER = "6281237522400";
@@ -52,12 +53,14 @@ function mapApiProgramToUI(p: ApiProgram): ProgramDisplay {
   const imageIndex = (p.id - 1) % DEFAULT_PROGRAM_IMAGES.length;
   const fallbackImage = DEFAULT_PROGRAM_IMAGES[imageIndex >= 0 ? imageIndex : 0];
   const image = p.image?.trim() || fallbackImage;
+  const jenjangs = p.jenjangs?.map((j) => j.nama) ?? [];
   return {
     id: p.id,
     title: p.nama,
     description: p.deskripsi ?? "",
     image,
     features: features.length ? features : ["Program berkualitas"],
+    jenjangs,
   };
 }
 
@@ -125,6 +128,7 @@ export default function ProgramsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedProgram, setSelectedProgram] = useState<number | null>(null);
+  const [activeCategory, setActiveCategory] = useState<string>("Semua");
 
   useEffect(() => {
     let cancelled = false;
@@ -209,8 +213,27 @@ export default function ProgramsPage() {
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-              {programs.map((program) => (
+            <>
+              {programs.length > 0 && (
+                <div className="flex flex-wrap justify-center gap-3 mb-10">
+                  {["Semua", ...Array.from(new Set(programs.flatMap((p) => p.jenjangs)))].map((cat) => (
+                    <Button
+                      key={cat}
+                      variant="outline"
+                      onClick={() => setActiveCategory(cat)}
+                      className={
+                        activeCategory === cat
+                          ? "bg-[#b42519] hover:bg-[#7a160d] text-white border-transparent"
+                          : "text-gray-600 border-gray-300 hover:border-[#b42519] hover:text-[#b42519]"
+                      }
+                    >
+                      {cat}
+                    </Button>
+                  ))}
+                </div>
+              )}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                {(activeCategory === "Semua" ? programs : programs.filter(p => p.jenjangs.includes(activeCategory))).map((program) => (
                 <motion.div
                   key={program.id}
                   initial={{ opacity: 0, y: 20 }}
@@ -264,7 +287,13 @@ export default function ProgramsPage() {
                   </Card>
                 </motion.div>
               ))}
+              {activeCategory !== "Semua" && programs.filter(p => p.jenjangs.includes(activeCategory)).length === 0 && (
+                <p className="text-center text-gray-500 py-8 col-span-full">
+                  Belum ada program untuk kategori {activeCategory}.
+                </p>
+              )}
             </div>
+            </>
           )}
           {!loading && programs.length === 0 && (
             <p className="text-center text-gray-500 py-8">
