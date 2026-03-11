@@ -109,7 +109,7 @@ export default function LandingPage() {
         ) as ApiProgram[];
         if (active.length > 0) {
           setPrograms(active.map(mapApiProgramToCard));
-          toast.success("Program unggulan dimuat");
+          // toast.success("Program unggulan dimuat");
           return;
         }
         const fallback = await fetchPublicProgram();
@@ -119,11 +119,11 @@ export default function LandingPage() {
           .filter((p) => !p.status || p.status === "Aktif")
           .slice(0, 4) as ApiProgram[];
         setPrograms(first.map(mapApiProgramToCard));
-        toast.info("Menampilkan daftar program");
+        // toast.info("Menampilkan daftar program");
       } catch {
         if (!cancelled) {
           setPrograms([]);
-          toast.error("Gagal memuat program unggulan");
+          // toast.error("Gagal memuat program unggulan");
         }
       } finally {
         if (!cancelled) setProgramsLoading(false);
