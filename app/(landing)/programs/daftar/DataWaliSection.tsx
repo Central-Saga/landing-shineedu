@@ -2,7 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import type { WaliState } from "./_components/types";
+import type { WaliState } from "./types";
 
 interface DataWaliSectionProps {
   wali: WaliState;
